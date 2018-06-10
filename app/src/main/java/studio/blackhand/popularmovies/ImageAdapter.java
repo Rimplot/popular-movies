@@ -1,11 +1,11 @@
 package studio.blackhand.popularmovies;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import com.squareup.picasso.Picasso;
 
 class ImageAdapter extends BaseAdapter {
 
@@ -16,7 +16,7 @@ class ImageAdapter extends BaseAdapter {
     }
 
     public int getCount() {
-        return mThumbIds.length;
+        return 10;
     }
 
     public Object getItem(int position) {
@@ -31,25 +31,14 @@ class ImageAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ImageView imageView;
         if (convertView == null) {
-            // if it's not recycled, initialize some attributes
-            LayoutInflater inflater = LayoutInflater.from(mContext);
-            imageView = inflater
-                    .inflate(R.layout.grid_item, null)
-                    .findViewById(R.id.grid_item);
+            // no view – create a new one
+            imageView = new ImageView(mContext);
         } else {
+            // recycle view
             imageView = (ImageView) convertView;
         }
 
-        imageView.setImageResource(mThumbIds[position]);
+        Picasso.get().load(R.drawable.pic).into(imageView);
         return imageView;
     }
-
-    // references to our images
-    private Integer[] mThumbIds = {
-            R.drawable.pic, R.drawable.pic,
-            R.drawable.pic, R.drawable.pic,
-            R.drawable.pic, R.drawable.pic,
-            R.drawable.pic, R.drawable.pic,
-            R.drawable.pic, R.drawable.pic
-    };
 }
