@@ -1,12 +1,8 @@
 package studio.blackhand.popularmovies.utilities;
 
-import android.content.res.Resources;
-import android.util.Log;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.InvalidParameterException;
 import java.util.Scanner;

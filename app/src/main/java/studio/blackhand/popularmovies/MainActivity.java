@@ -3,12 +3,12 @@ package studio.blackhand.popularmovies;
 import android.annotation.SuppressLint;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -40,10 +40,7 @@ public class MainActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //getSupportLoaderManager().initLoader(MOVIE_LOADER, null, this);
-
         String queryString = NetworkUtils.buildQueryUrlString(mode);
-        Log.e("mittomén", queryString);
 
         Bundle queryBundle = new Bundle();
         queryBundle.putString(QUERY_URL_EXTRA_KEY, queryString);
@@ -109,11 +106,6 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onLoadFinished(@NonNull Loader<String> loader, String data) {
-        if (null == data) {Log.e("Error!", "Franc tudja miért üres a data...");
-        } else {
-            Log.i("output", data);
-        }
-
         movies = JsonUtils.parseJson(data);
 
         Log.w("Movies:", movies.get(0).getPosterPath());
