@@ -1,6 +1,7 @@
-package studio.blackhand.popularmovies;
+package studio.blackhand.popularmovies.utilities;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,10 +9,16 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import com.squareup.picasso.Picasso;
 
-class ImageAdapter extends BaseAdapter {
+import studio.blackhand.popularmovies.MainActivity;
+import studio.blackhand.popularmovies.R;
+
+public class ImageAdapter extends BaseAdapter {
 
     private Context mContext;
     private LayoutInflater inflater;
+
+    private static String POSTER_URI_STRING = "http://image.tmdb.org/t/p/";
+    private static String POSTER_WIDTH = "w185";
 
     public ImageAdapter(Context c) {
         mContext = c;
@@ -19,7 +26,7 @@ class ImageAdapter extends BaseAdapter {
     }
 
     public int getCount() {
-        return images.length;
+        return MainActivity.movies.size();
     }
 
     public Object getItem(int position) {
@@ -37,15 +44,19 @@ class ImageAdapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.grid_item, parent, false);
         }
 
+        String posterUri = POSTER_URI_STRING + POSTER_WIDTH + MainActivity.movies.get(position).getPosterPath();
+        Log.i("Poster URI:", posterUri);
+
         Picasso
             .get()
-            .load(images[position])
+            .load(posterUri)
             .into((ImageView) convertView);
 
         return convertView;
     }
 
     public static String[] images = {
+            "http://image.tmdb.org/t/p/w185/ePyN2nX9t8SOl70eRW47Q29zUFO.jpg",
             "http://image.tmdb.org/t/p/w185/nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg",
             "http://image.tmdb.org/t/p/w185/c9XxwwhPHdaImA2f1WEfEsbhaFB.jpg",
             "http://image.tmdb.org/t/p/w185/to0spRl1CMDvyUbOnbb4fTk3VAd.jpg",
