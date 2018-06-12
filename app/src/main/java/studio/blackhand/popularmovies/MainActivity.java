@@ -18,7 +18,6 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 
 import studio.blackhand.popularmovies.model.Movie;
 import studio.blackhand.popularmovies.utilities.ImageAdapter;
@@ -33,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements
 
     private static String mode = NetworkUtils.MODE_POPULAR;
 
-    public static List<Movie> movies = new ArrayList<>();
+    private static ArrayList<Movie> movies = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,8 +58,6 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public Loader<String> onCreateLoader(int id, final Bundle args) {
         return new AsyncTaskLoader<String>(this) {
-            // COMPLETED (1) Create a String member variable called mGithubJson that will store the raw JSON
-            /* This String will contain the raw JSON from the results of our Github search */
             String mJson;
 
             @Override
@@ -70,7 +67,6 @@ public class MainActivity extends AppCompatActivity implements
                     return;
                 }
 
-                // COMPLETED (2) If mGithubJson is not null, deliver that result. Otherwise, force a load
                 /*
                  * If we already have cached results, just deliver them now. If we don't have any
                  * cached results, force a load.
@@ -108,10 +104,8 @@ public class MainActivity extends AppCompatActivity implements
     public void onLoadFinished(@NonNull Loader<String> loader, String data) {
         movies = JsonUtils.parseJson(data);
 
-        Log.w("Movies:", movies.get(0).getPosterPath());
-
         GridView gridView = findViewById(R.id.main_grid);
-        gridView.setAdapter(new ImageAdapter(this));
+        gridView.setAdapter(new ImageAdapter(this, movies));
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {

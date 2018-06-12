@@ -5,7 +5,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import studio.blackhand.popularmovies.model.Movie;
 
@@ -26,8 +25,8 @@ public class JsonUtils {
     public static final String JSON_KEY_VOTE_AVERAGE = "vote_average";
     public static final String JSON_KEY_GENRE_IDS = "genre_ids";
 
-    public static List<Movie> parseJson(String json) {
-        List<Movie> movies = new ArrayList<>();
+    public static ArrayList<Movie> parseJson(String json) {
+        ArrayList<Movie> movies = new ArrayList<>();
 
         try {
             JSONObject jsonObject = new JSONObject(json);
@@ -57,7 +56,7 @@ public class JsonUtils {
         double popularity;
         Integer voteCount;
         double voteAverage;
-        List<Integer> genreIds = new ArrayList<>();
+        ArrayList<Integer> genreIds = new ArrayList<>();
 
         try {
             JSONObject jsonObject = new JSONObject(json);
