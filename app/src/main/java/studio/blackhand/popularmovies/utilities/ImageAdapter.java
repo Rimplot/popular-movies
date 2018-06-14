@@ -18,17 +18,13 @@ public class ImageAdapter extends BaseAdapter {
 
     private Context mContext;
     private LayoutInflater inflater;
-    private ArrayList<Movie> allMovies;
+
+    public ArrayList<Movie> allMovies;
 
     private static String POSTER_URI_STRING = "http://image.tmdb.org/t/p/";
     private static String POSTER_WIDTH = "w185";
 
     public ImageAdapter(Context c, ArrayList<Movie> movies) {
-        movies = new ArrayList<>();
-        movies.add(new Movie(0, "", "", "", "/ePyN2nX9t8SOl70eRW47Q29zUFO.jpg", false, "", "", 0, 0, 0, new ArrayList<Integer>()));
-        movies.add(new Movie(0, "", "", "", "/nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg", false, "", "", 0, 0, 0, new ArrayList<Integer>()));
-        movies.add(new Movie(0, "", "", "", "/c9XxwwhPHdaImA2f1WEfEsbhaFB.jpg", false, "", "", 0, 0, 0, new ArrayList<Integer>()));
-
         mContext = c;
         inflater = LayoutInflater.from(mContext);
         allMovies = movies;
@@ -38,7 +34,7 @@ public class ImageAdapter extends BaseAdapter {
         return allMovies.size();
     }
 
-    public Object getItem(int position) {
+    public Movie getItem(int position) {
         return allMovies.get(position);
     }
 
@@ -59,6 +55,7 @@ public class ImageAdapter extends BaseAdapter {
         Picasso
             .get()
             .load(posterUri)
+            .placeholder(R.drawable.transparent)
             .into((ImageView) convertView);
 
         return convertView;

@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -32,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements
 
     private static String mode = NetworkUtils.MODE_POPULAR;
 
-    private static ArrayList<Movie> movies = new ArrayList<>();
+    private ImageAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +67,9 @@ public class MainActivity extends AppCompatActivity implements
                 if (args == null) {
                     return;
                 }
+
+                ProgressBar progressBar = findViewById(R.id.progressBar);
+                progressBar.setVisibility(View.VISIBLE);
 
                 /*
                  * If we already have cached results, just deliver them now. If we don't have any
@@ -102,16 +106,22 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onLoadFinished(@NonNull Loader<String> loader, String data) {
-        movies = JsonUtils.parseJson(data);
+        ArrayList<Movie> movies = JsonUtils.parseJson(data);
 
         GridView gridView = findViewById(R.id.main_grid);
-        gridView.setAdapter(new ImageAdapter(this, movies));
+        adapter = new ImageAdapter(this, movies);
+        gridView.setAdapter(adapter);
+
+        ProgressBar progressBar = findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.GONE);
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                Toast.makeText(MainActivity.this, "" + position, Toast.LENGTH_SHORT).show();
+                Movie movie = adapter.getItem(position);
+                Toast.makeText(MainActivity.this, movie.getTitle(), Toast.LENGTH_SHORT).show();
             }
         });
+
     }
 
     @Override
