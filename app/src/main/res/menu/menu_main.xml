@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/button_popular"
+        android:icon="@android:drawable/checkbox_on_background"
+        android:title="Most popular movies"
+        app:showAsAction="withText" />
+
+    <item
+        android:id="@+id/button_top_rated"
+        android:title="Top rated movies"
+        app:showAsAction="never" />
+</menu>

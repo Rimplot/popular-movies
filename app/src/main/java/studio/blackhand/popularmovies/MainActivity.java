@@ -10,7 +10,10 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -18,6 +21,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -54,20 +58,7 @@ public class MainActivity extends AppCompatActivity implements
             {
                 if(firstVisibleItem + visibleItemCount >= totalItemCount){
                     // End has been reached
-                    String queryString = NetworkUtils.buildQueryUrlString(mode, resultsPage + 1);
-                    Log.e("URL", queryString);
-
-                    Bundle queryBundle = new Bundle();
-                    queryBundle.putString(QUERY_URL_EXTRA_KEY, queryString);
-
-                    LoaderManager loaderManager = getSupportLoaderManager();
-                    Loader<String> movieQueryLoader = loaderManager.getLoader(MOVIE_LOADER);
-
-                    if (movieQueryLoader == null) {
-                        loaderManager.initLoader(MOVIE_LOADER, queryBundle, MainActivity.this);
-                    } else {
-                        loaderManager.restartLoader(MOVIE_LOADER, queryBundle, MainActivity.this);
-                    }
+                    updateResults();
                 }
             }
 
@@ -76,6 +67,31 @@ public class MainActivity extends AppCompatActivity implements
 
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.button_popular) {
+            mode = NetworkUtils.MODE_POPULAR;
+            resultsPage = 0;
+            adapter.clear();
+            updateResults();
+        } else if (id == R.id.button_top_rated) {
+            mode = NetworkUtils.MODE_TOP_RATED;
+            resultsPage = 0;
+            adapter.clear();
+            updateResults();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @SuppressLint("StaticFieldLeak")
@@ -135,5 +151,22 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onLoaderReset(@NonNull Loader<String> loader) {
 
+    }
+
+    public void updateResults() {
+        String queryString = NetworkUtils.buildQueryUrlString(mode, resultsPage + 1);
+        Log.e("URL", queryString);
+
+        Bundle queryBundle = new Bundle();
+        queryBundle.putString(QUERY_URL_EXTRA_KEY, queryString);
+
+        LoaderManager loaderManager = getSupportLoaderManager();
+        Loader<String> movieQueryLoader = loaderManager.getLoader(MOVIE_LOADER);
+
+        if (movieQueryLoader == null) {
+            loaderManager.initLoader(MOVIE_LOADER, queryBundle, MainActivity.this);
+        } else {
+            loaderManager.restartLoader(MOVIE_LOADER, queryBundle, MainActivity.this);
+        }
     }
 }

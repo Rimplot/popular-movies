@@ -30,6 +30,11 @@ public class ImageAdapter extends BaseAdapter {
         allMovies = movies;
     }
 
+    public void clear() {
+        allMovies.clear();
+        notifyDataSetChanged();
+    }
+
     public int getCount() {
         return allMovies.size();
     }
