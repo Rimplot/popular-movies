@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ProgressBar;
@@ -34,24 +35,47 @@ public class MainActivity extends AppCompatActivity implements
     private static String mode = NetworkUtils.MODE_POPULAR;
 
     private ImageAdapter adapter;
+    private GridView gridView;
+    private Integer resultsPage = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        String queryString = NetworkUtils.buildQueryUrlString(mode);
+        gridView = findViewById(R.id.main_grid);
 
-        Bundle queryBundle = new Bundle();
-        queryBundle.putString(QUERY_URL_EXTRA_KEY, queryString);
+        adapter = new ImageAdapter(this, new ArrayList<Movie>());
+        gridView.setAdapter(adapter);
 
-        LoaderManager loaderManager = getSupportLoaderManager();
-        Loader<String> movieQueryLoader = loaderManager.getLoader(MOVIE_LOADER);
-        if (movieQueryLoader == null) {
-            loaderManager.initLoader(MOVIE_LOADER, queryBundle, this);
-        } else {
-            loaderManager.restartLoader(MOVIE_LOADER, queryBundle, this);
-        }
+        gridView.setOnScrollListener(new AbsListView.OnScrollListener(){
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount)
+            {
+                if(firstVisibleItem + visibleItemCount >= totalItemCount){
+                    // End has been reached
+                    String queryString = NetworkUtils.buildQueryUrlString(mode, resultsPage + 1);
+                    Log.e("URL", queryString);
+
+                    Bundle queryBundle = new Bundle();
+                    queryBundle.putString(QUERY_URL_EXTRA_KEY, queryString);
+
+                    LoaderManager loaderManager = getSupportLoaderManager();
+                    Loader<String> movieQueryLoader = loaderManager.getLoader(MOVIE_LOADER);
+
+                    if (movieQueryLoader == null) {
+                        loaderManager.initLoader(MOVIE_LOADER, queryBundle, MainActivity.this);
+                    } else {
+                        loaderManager.restartLoader(MOVIE_LOADER, queryBundle, MainActivity.this);
+                    }
+                }
+            }
+
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState){
+
+            }
+        });
     }
 
     @SuppressLint("StaticFieldLeak")
@@ -59,8 +83,6 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public Loader<String> onCreateLoader(int id, final Bundle args) {
         return new AsyncTaskLoader<String>(this) {
-            String mJson;
-
             @Override
             protected void onStartLoading() {
                 /* If no arguments were passed, we don't have a query to perform. Simply return. */
@@ -71,15 +93,7 @@ public class MainActivity extends AppCompatActivity implements
                 ProgressBar progressBar = findViewById(R.id.progressBar);
                 progressBar.setVisibility(View.VISIBLE);
 
-                /*
-                 * If we already have cached results, just deliver them now. If we don't have any
-                 * cached results, force a load.
-                 */
-                if (mJson != null) {
-                    deliverResult(mJson);
-                } else {
-                    forceLoad();
-                }
+                forceLoad();
             }
 
             @Override
@@ -95,22 +109,17 @@ public class MainActivity extends AppCompatActivity implements
                     return null;
                 }
             }
-
-            @Override
-            public void deliverResult(String json) {
-                mJson = json;
-                super.deliverResult(json);
-            }
         };
     }
 
     @Override
     public void onLoadFinished(@NonNull Loader<String> loader, String data) {
+        resultsPage++;  // stores the id of the page queried most recently
+
         ArrayList<Movie> movies = JsonUtils.parseJson(data);
 
-        GridView gridView = findViewById(R.id.main_grid);
-        adapter = new ImageAdapter(this, movies);
-        gridView.setAdapter(adapter);
+        adapter.allMovies.addAll(movies);
+        adapter.notifyDataSetChanged();
 
         ProgressBar progressBar = findViewById(R.id.progressBar);
         progressBar.setVisibility(View.GONE);
@@ -121,7 +130,6 @@ public class MainActivity extends AppCompatActivity implements
                 Toast.makeText(MainActivity.this, movie.getTitle(), Toast.LENGTH_SHORT).show();
             }
         });
-
     }
 
     @Override

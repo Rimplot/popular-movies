@@ -19,7 +19,7 @@ public class NetworkUtils {
     public final static String MODE_POPULAR = "mode_popular";
     public final static String MODE_TOP_RATED = "top_rated";
 
-    public static String buildQueryUrlString(String queryType) throws InvalidParameterException {
+    public static String buildQueryUrlString(String queryType, Integer page) throws InvalidParameterException {
         String urlString = THEMOVIEDB_BASE_URL + "/"
                 + API_VERSION + "/";
 
@@ -32,6 +32,7 @@ public class NetworkUtils {
         }
 
         urlString += "?api_key=" + API_KEY;
+        urlString += "&page=" + page;
 
         return urlString;
     }
