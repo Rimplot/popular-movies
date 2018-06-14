@@ -9,12 +9,12 @@ import java.util.Scanner;
 
 public class NetworkUtils {
 
-    final static String THEMOVIEDB_BASE_URL = "http://api.themoviedb.org";
-    final static String API_VERSION = "3";
-    final static String API_KEY = "";
+    private final static String THEMOVIEDB_BASE_URL = "http://api.themoviedb.org";
+    private final static String API_VERSION = "3";
+    private final static String API_KEY = "";
 
-    final static String ENDPOINT_POPULAR = "movie/popular";
-    final static String ENDPOINT_TOP_RATED = "movie/top_rated";
+    private final static String ENDPOINT_POPULAR = "movie/popular";
+    private final static String ENDPOINT_TOP_RATED = "movie/top_rated";
 
     public final static String MODE_POPULAR = "mode_popular";
     public final static String MODE_TOP_RATED = "top_rated";
@@ -23,12 +23,15 @@ public class NetworkUtils {
         String urlString = THEMOVIEDB_BASE_URL + "/"
                 + API_VERSION + "/";
 
-        if (queryType.equals(MODE_POPULAR)) {
-            urlString += ENDPOINT_POPULAR + "/";
-        } else if (queryType.equals(MODE_TOP_RATED)) {
-            urlString += ENDPOINT_TOP_RATED + "/";
-        } else {
-            throw new InvalidParameterException("Invalid value of queryType");
+        switch (queryType) {
+            case MODE_POPULAR:
+                urlString += ENDPOINT_POPULAR + "/";
+                break;
+            case MODE_TOP_RATED:
+                urlString += ENDPOINT_TOP_RATED + "/";
+                break;
+            default:
+                throw new InvalidParameterException("Invalid value of queryType");
         }
 
         urlString += "?api_key=" + API_KEY;

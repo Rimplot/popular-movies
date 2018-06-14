@@ -1,8 +1,8 @@
 package studio.blackhand.popularmovies;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
@@ -13,15 +13,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -39,18 +36,31 @@ public class MainActivity extends AppCompatActivity implements
     private static String mode = NetworkUtils.MODE_POPULAR;
 
     private ImageAdapter adapter;
-    private GridView gridView;
-    private Integer resultsPage = 0;
+    private static Integer resultsPage = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        gridView = findViewById(R.id.main_grid);
+        GridView gridView = findViewById(R.id.main_grid);
 
         adapter = new ImageAdapter(this, new ArrayList<Movie>());
         gridView.setAdapter(adapter);
+
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+                Movie movie = adapter.getItem(position);
+
+                Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
+                intent.putExtra(DetailsActivity.KEY_TITLE, movie.getTitle());
+                intent.putExtra(DetailsActivity.KEY_RELEASE_DATE, movie.getReleaseDate());
+                intent.putExtra(DetailsActivity.KEY_POSTER_PATH, movie.getPosterPath());
+                intent.putExtra(DetailsActivity.KEY_VOTE_AVERAGE, movie.getVoteAverage());
+                intent.putExtra(DetailsActivity.KEY_PLOT_SYNOPSIS, movie.getOverview());
+                MainActivity.this.startActivity(intent);
+            }
+        });
 
         gridView.setOnScrollListener(new AbsListView.OnScrollListener(){
             @Override
@@ -80,12 +90,13 @@ public class MainActivity extends AppCompatActivity implements
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.button_popular) {
+        // update results only if mode changed
+        if (id == R.id.button_popular && !mode.equals(NetworkUtils.MODE_POPULAR)) {
             mode = NetworkUtils.MODE_POPULAR;
             resultsPage = 0;
             adapter.clear();
             updateResults();
-        } else if (id == R.id.button_top_rated) {
+        } else if (id == R.id.button_top_rated && !mode.equals(NetworkUtils.MODE_TOP_RATED)) {
             mode = NetworkUtils.MODE_TOP_RATED;
             resultsPage = 0;
             adapter.clear();
@@ -118,8 +129,7 @@ public class MainActivity extends AppCompatActivity implements
 
                 try {
                     URL queryUrl = new URL(queryUrlString);
-                    String queryResult = NetworkUtils.getResponseFromHttpUrl(queryUrl);
-                    return queryResult;
+                    return NetworkUtils.getResponseFromHttpUrl(queryUrl);
                 } catch (IOException e) {
                     e.printStackTrace();
                     return null;
@@ -139,13 +149,6 @@ public class MainActivity extends AppCompatActivity implements
 
         ProgressBar progressBar = findViewById(R.id.progressBar);
         progressBar.setVisibility(View.GONE);
-
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                Movie movie = adapter.getItem(position);
-                Toast.makeText(MainActivity.this, movie.getTitle(), Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
     @Override

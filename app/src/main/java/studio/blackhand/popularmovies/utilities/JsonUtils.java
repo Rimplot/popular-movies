@@ -10,20 +10,20 @@ import studio.blackhand.popularmovies.model.Movie;
 
 public class JsonUtils {
 
-    public static final String JSON_KEY_RESULTS = "results";
+    private static final String JSON_KEY_RESULTS = "results";
 
-    public static final String JSON_KEY_ID = "id";
-    public static final String JSON_KEY_TITLE = "title";
-    public static final String JSON_KEY_ORIGINAL_TITLE = "original_title";
-    public static final String JSON_KEY_ORIGINAL_LANGUAGE = "original_language";
-    public static final String JSON_KEY_POSTER_PATH = "poster_path";
-    public static final String JSON_KEY_ADULT = "adult";
-    public static final String JSON_KEY_OVERVIEW = "overview";
-    public static final String JSON_KEY_RELEASE_DATE = "release_date";
-    public static final String JSON_KEY_POPULARITY = "popularity";
-    public static final String JSON_KEY_VOTE_COUNT = "vote_count";
-    public static final String JSON_KEY_VOTE_AVERAGE = "vote_average";
-    public static final String JSON_KEY_GENRE_IDS = "genre_ids";
+    private static final String JSON_KEY_ID = "id";
+    private static final String JSON_KEY_TITLE = "title";
+    private static final String JSON_KEY_ORIGINAL_TITLE = "original_title";
+    private static final String JSON_KEY_ORIGINAL_LANGUAGE = "original_language";
+    private static final String JSON_KEY_POSTER_PATH = "poster_path";
+    private static final String JSON_KEY_ADULT = "adult";
+    private static final String JSON_KEY_OVERVIEW = "overview";
+    private static final String JSON_KEY_RELEASE_DATE = "release_date";
+    private static final String JSON_KEY_POPULARITY = "popularity";
+    private static final String JSON_KEY_VOTE_COUNT = "vote_count";
+    private static final String JSON_KEY_VOTE_AVERAGE = "vote_average";
+    private static final String JSON_KEY_GENRE_IDS = "genre_ids";
 
     public static ArrayList<Movie> parseJson(String json) {
         ArrayList<Movie> movies = new ArrayList<>();
@@ -43,7 +43,7 @@ public class JsonUtils {
         return movies;
     }
 
-    public static Movie parseMovieJson(String json) {
+    private static Movie parseMovieJson(String json) {
 
         Integer id;
         String title;

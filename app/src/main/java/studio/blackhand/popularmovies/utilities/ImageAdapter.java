@@ -16,17 +16,15 @@ import studio.blackhand.popularmovies.model.Movie;
 
 public class ImageAdapter extends BaseAdapter {
 
-    private Context mContext;
     private LayoutInflater inflater;
 
     public ArrayList<Movie> allMovies;
 
-    private static String POSTER_URI_STRING = "http://image.tmdb.org/t/p/";
-    private static String POSTER_WIDTH = "w185";
+    public static final String POSTER_URI_STRING = "http://image.tmdb.org/t/p/";
+    private static final String POSTER_WIDTH = "w185";
 
     public ImageAdapter(Context c, ArrayList<Movie> movies) {
-        mContext = c;
-        inflater = LayoutInflater.from(mContext);
+        inflater = LayoutInflater.from(c);
         allMovies = movies;
     }
 

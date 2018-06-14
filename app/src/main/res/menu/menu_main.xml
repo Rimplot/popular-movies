@@ -5,11 +5,11 @@
     <item
         android:id="@+id/button_popular"
         android:icon="@android:drawable/checkbox_on_background"
-        android:title="Most popular movies"
+        android:title="@string/most_popular_movies"
         app:showAsAction="withText" />
 
     <item
         android:id="@+id/button_top_rated"
-        android:title="Top rated movies"
+        android:title="@string/top_rated_movies"
         app:showAsAction="never" />
 </menu>
