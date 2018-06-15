@@ -7,11 +7,13 @@ import java.net.URL;
 import java.security.InvalidParameterException;
 import java.util.Scanner;
 
+import studio.blackhand.popularmovies.BuildConfig;
+
 public class NetworkUtils {
 
     private final static String THEMOVIEDB_BASE_URL = "http://api.themoviedb.org";
     private final static String API_VERSION = "3";
-    private final static String API_KEY = "";
+    private final static String API_KEY = BuildConfig.API_KEY;
 
     private final static String ENDPOINT_POPULAR = "movie/popular";
     private final static String ENDPOINT_TOP_RATED = "movie/top_rated";
