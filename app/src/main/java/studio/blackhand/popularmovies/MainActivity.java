@@ -17,6 +17,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.net.URL;
@@ -153,19 +154,23 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     public void updateResults() {
-        String queryString = NetworkUtils.buildQueryUrlString(mode, resultsPage + 1);
-        Log.e("URL", queryString);
+        if (NetworkUtils.isOnline(this)) {
+            String queryString = NetworkUtils.buildQueryUrlString(mode, resultsPage + 1);
+            Log.e("URL", queryString);
 
-        Bundle queryBundle = new Bundle();
-        queryBundle.putString(QUERY_URL_EXTRA_KEY, queryString);
+            Bundle queryBundle = new Bundle();
+            queryBundle.putString(QUERY_URL_EXTRA_KEY, queryString);
 
-        LoaderManager loaderManager = getSupportLoaderManager();
-        Loader<String> movieQueryLoader = loaderManager.getLoader(MOVIE_LOADER);
+            LoaderManager loaderManager = getSupportLoaderManager();
+            Loader<String> movieQueryLoader = loaderManager.getLoader(MOVIE_LOADER);
 
-        if (movieQueryLoader == null) {
-            loaderManager.initLoader(MOVIE_LOADER, queryBundle, MainActivity.this);
+            if (movieQueryLoader == null) {
+                loaderManager.initLoader(MOVIE_LOADER, queryBundle, MainActivity.this);
+            } else {
+                loaderManager.restartLoader(MOVIE_LOADER, queryBundle, MainActivity.this);
+            }
         } else {
-            loaderManager.restartLoader(MOVIE_LOADER, queryBundle, MainActivity.this);
+            Toast.makeText(this, R.string.error_no_connection, Toast.LENGTH_SHORT).show();
         }
     }
 }

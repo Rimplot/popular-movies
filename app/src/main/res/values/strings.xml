@@ -5,4 +5,5 @@
     <string name="plot_synopsis">Plot Synopsis</string>
     <string name="most_popular_movies">Most popular movies</string>
     <string name="top_rated_movies">Top rated movies</string>
+    <string name="error_no_connection">No internet connection. Please try again later.</string>
 </resources>

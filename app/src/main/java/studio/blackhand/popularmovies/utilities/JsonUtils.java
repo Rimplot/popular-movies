@@ -28,16 +28,18 @@ public class JsonUtils {
     public static ArrayList<Movie> parseJson(String json) {
         ArrayList<Movie> movies = new ArrayList<>();
 
-        try {
-            JSONObject jsonObject = new JSONObject(json);
-            JSONArray movieJsonArray = jsonObject.optJSONArray(JSON_KEY_RESULTS);
+        if (json != null) {
+            try {
+                JSONObject jsonObject = new JSONObject(json);
+                JSONArray movieJsonArray = jsonObject.optJSONArray(JSON_KEY_RESULTS);
 
-            for (int i = 0; i < movieJsonArray.length(); i++) {
-                movies.add(parseMovieJson(movieJsonArray.get(i).toString()));
+                for (int i = 0; i < movieJsonArray.length(); i++) {
+                    movies.add(parseMovieJson(movieJsonArray.get(i).toString()));
+                }
+
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
             }
-
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
         }
 
         return movies;
