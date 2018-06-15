@@ -53,11 +53,7 @@ public class MainActivity extends AppCompatActivity implements
                 Movie movie = adapter.getItem(position);
 
                 Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
-                intent.putExtra(DetailsActivity.KEY_TITLE, movie.getTitle());
-                intent.putExtra(DetailsActivity.KEY_RELEASE_DATE, movie.getReleaseDate());
-                intent.putExtra(DetailsActivity.KEY_POSTER_PATH, movie.getPosterPath());
-                intent.putExtra(DetailsActivity.KEY_VOTE_AVERAGE, movie.getVoteAverage());
-                intent.putExtra(DetailsActivity.KEY_PLOT_SYNOPSIS, movie.getOverview());
+                intent.putExtra(DetailsActivity.KEY_MOVIE, movie);
                 MainActivity.this.startActivity(intent);
             }
         });
