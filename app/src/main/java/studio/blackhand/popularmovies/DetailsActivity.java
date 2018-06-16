@@ -2,7 +2,6 @@ package studio.blackhand.popularmovies;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -57,14 +56,5 @@ public class DetailsActivity extends AppCompatActivity {
         tvReleaseDate.setText(movie.getReleaseDate());
         tvVoteAverage.setText(rating);
         tvPlotSynopsis.setText(movie.getOverview());
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            super.onBackPressed();  // simulate back button press, do not reload the whole activity
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 }
