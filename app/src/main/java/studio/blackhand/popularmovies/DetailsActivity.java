@@ -2,6 +2,8 @@ package studio.blackhand.popularmovies;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -19,6 +21,8 @@ public class DetailsActivity extends AppCompatActivity {
     public static final String KEY_MOVIE = "movie_key";
 
     private static final String POSTER_WIDTH = "original";
+
+    private static boolean favourite = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,5 +60,29 @@ public class DetailsActivity extends AppCompatActivity {
         tvReleaseDate.setText(movie.getReleaseDate());
         tvVoteAverage.setText(rating);
         tvPlotSynopsis.setText(movie.getOverview());
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_details, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.button_favourite) {
+            if (favourite) {
+                favourite = false;
+                item.setIcon(R.drawable.ic_star_border);
+            } else {
+                favourite = true;
+                item.setIcon(R.drawable.ic_star);
+            }
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
